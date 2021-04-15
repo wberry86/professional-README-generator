@@ -8,15 +8,79 @@ const inquirer = require('inquirer');
 // TODO: Create an array of questions for user input
 const questions = [];
 
-inquirer
-  .prompt([
+const promptUser = () => {
+return inquirer.prompt([
     {
       type: 'input',
-      name: 'Title',
-      message: 'What is the title of your project?'
+      name: 'title',
+      message: 'What is the title of your project? (required)',
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log('Please enter your name!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'description',
+      message: 'Please enter a description of your project. (required)',
+      validate: descriptionInput => {
+        if (descriptionInput) {
+          return true;
+        } else {
+          console.log('Please enter a description!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'confirm',
+      name: 'table of contents',
+      message: 'Would you like to add a table of contents?',
+      default: false
+    },
+    {
+      type: 'input',
+      name: 'installation',
+      message: 'What are the steps required to install your project?'
+    },
+    {
+      type: 'input',
+      name: 'usage',
+      message: 'Provide instructions and examples for use.'
+    },
+    {
+      type: 'input',
+      name: 'License',
+      message: 'Provide license if applicable.'
+    },
+    {
+      type: 'input',
+      name: 'Contributing',
+      message: 'Provide a list of contributors if applicable.'
+    },
+    {
+      type: 'input',
+      name: 'Tests',
+      message: 'Provide examples of tests if applicable.'
+    },
+    {
+      type: 'input',
+      name: 'github',
+      message: 'Please enter your GitHub username.'
+    },
+    {
+      type: 'input',
+      name: 'email',
+      message: 'Please enter your email.'
     }
-  ])
-  .then(answers => console.log(answers));
+  ]);
+};
+  
+promptUser().then(answers => console.log(answers));
 
 // TODO: Create a function to write README file
 // function writeToFile(fileName, data) {}
