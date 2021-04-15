@@ -1,24 +1,32 @@
 
-const readmeDataArgs = process.argv.slice(2);
-const [fileName, data] = readmeDataArgs;
-
 // TODO: Include packages needed for this application
-var inquirer = require('inquirer');
-const fs = require('fs');
-const writeToFile = require('./src/page-template');
+const inquirer = require('inquirer');
+
+//const fs = require('fs');
+//const writeToFile = require('./src/page-template');
 
 // TODO: Create an array of questions for user input
 const questions = [];
+
+inquirer
+  .prompt([
+    {
+      type: 'input',
+      name: 'Title',
+      message: 'What is the title of your project?'
+    }
+  ])
+  .then(answers => console.log(answers));
 
 // TODO: Create a function to write README file
 // function writeToFile(fileName, data) {}
 
 
-fs.writeFile('index.html', writeToFile(fileName, data), err => {
-    if (err) throw err;
+//fs.writeFile('index.html', writeToFile(fileName, data), err => {
+    //if (err) throw err;
 
-    console.log('Readme complete! Check out index.html to see the output!');
-});
+    //console.log('Readme complete! Check out index.html to see the output!');
+//});
 
 
 // TODO: Create a function to initialize app
