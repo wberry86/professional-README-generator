@@ -1,8 +1,8 @@
 // TODO: Include packages needed for this application
 const inquirer = require("inquirer");
 
-//const fs = require('fs');
-//const writeToFile = require('./src/page-template');
+const fs = require('fs');
+const writeToFile = require('./src/page-template');
 
 // TODO: Create an array of questions for user input
 const questions = [];
@@ -91,7 +91,19 @@ const promptUser = () => {
   ]);
 };
 
-promptUser().then((answers) => console.log(answers));
+promptUser()
+  .then(portfolioData => {
+    const pageHTML = writeToFile(portfolioData);
+
+     fs.writeFile('./index.html', pageHTML, err => {
+       if (err) throw new Error(err);
+
+       console.log('Readme complete! Check out index.html in this directory to see it!');
+    });
+  });
+
+
+//promptUser().then((answers) => console.log(answers));
 
 // TODO: Create a function to write README file
 // function writeToFile(fileName, data) {}
