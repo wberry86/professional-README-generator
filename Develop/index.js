@@ -2,13 +2,12 @@
 const inquirer = require("inquirer");
 
 const fs = require('fs');
-const writeToFile = require('./src/page-template');
+//const writeToFile = require('./src/page-template');
+const generateMarkdown = require('./utils/generateMarkdown');
 
 // TODO: Create an array of questions for user input
-const questions = [];
+const questions = [
 
-const promptUser = () => {
-  return inquirer.prompt([
     {
       type: "input",
       name: "title",
@@ -54,19 +53,36 @@ const promptUser = () => {
       },
     },
     {
-      type: "input",
+      type: "confirm",
       name: "installation",
-      message: "What are the steps required to install your project?",
+      message: "Are there any installation requirements?",
+      default: true,
+    },
+    {
+      type: "input",
+      name: "steps",
+      message: "Please provide a list:",
+      when: ({ installation }) => {
+        if (installation) {
+          return true;
+        } else {
+          return false;
+        }
+      },
     },
     {
       type: "input",
       name: "usage",
-      message: "Provide instructions and examples for use.",
+      message: "How is this application used?",
     },
     {
-      type: "input",
-      name: "License",
-      message: "Provide license if applicable.",
+      type: "checkbox",
+      message: "License?",
+      name: "license",
+      choices: [
+        "[MIT License](LICENSE.txt)", 
+        "[GNU GPLv3 License](COPYING.txt)", 
+      ]
     },
     {
       type: "input",
@@ -88,12 +104,14 @@ const promptUser = () => {
       name: "email",
       message: "Please enter your email.",
     },
-  ]);
-};
+  ];
 
+
+
+/*
 promptUser()
-  .then(portfolioData => {
-    const pageHTML = writeToFile(portfolioData);
+  .then(readmeData => {
+    const pageHTML = writeToFile(readmeData);
 
      fs.writeFile('./index.html', pageHTML, err => {
        if (err) throw new Error(err);
@@ -101,30 +119,29 @@ promptUser()
        console.log('Readme complete! Check out index.html in this directory to see it!');
     });
   });
+  */
 
-
-//promptUser().then((answers) => console.log(answers));
 
 // TODO: Create a function to write README file
-// function writeToFile(fileName, data) {}
+function writeToFile(fileName, data) {
+  fs.writeFile(fileName, data, (err) => {
+      if (err)
+          throw err;
+      console.log('Success! Information transferred to the README!')
+  });
+};
 
-//fs.writeFile('index.html', writeToFile(fileName, data), err => {
-//if (err) throw err;
-
-//console.log('Readme complete! Check out index.html to see the output!');
-//});
 
 // TODO: Create a function to initialize app
-function init() {}
+function init() {
+  inquirer.prompt(questions)
+  .then(function (userInput) {
+      console.log(userInput)
+      writeToFile("README.md", generateMarkdown(userInput));
+  });
+};
 
 // Function call to initialize app
 init();
 
-/*
 
-const printReadmeData = readmeDataArr => {
-    readmeDataArr.forEach(readmeData => console.log(readmeData));
-}
-printReadmeData(readmeDataArgs);
-
-*/
