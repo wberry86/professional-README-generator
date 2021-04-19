@@ -1,6 +1,5 @@
 # Professional README Generator Starter Code
 
-[How to create a Professional README](./readme-guide.md)
 
 ## Description
 
@@ -18,6 +17,10 @@
 ### Link to Website
 
 [professional readme generator](https://github.com/wberry86/professional-README-generator)
+
+### Link to Live Walkthrough
+
+[readme walkthrough video](https://drive.google.com/file/d/1ch_dqcDaEIRUamwdheD6mRRyuaTILM9f/view)
 
 
 #### Screenshot of webpage
