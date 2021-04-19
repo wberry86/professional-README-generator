@@ -1,130 +1,132 @@
 // TODO: Include packages needed for this application
 const inquirer = require("inquirer");
 
-const fs = require('fs');
-const writeToFile = require('./src/page-template');
+const fs = require("fs");
+//const writeToFile = require('./src/page-template');
+const generateMarkdown = require("./utils/generateMarkdown");
 
 // TODO: Create an array of questions for user input
-const questions = [];
+const questions = [
+  {
+    type: "input",
+    name: "title",
+    message: "What is the title of your project? (required)",
+    validate: (nameInput) => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log("Please enter your name!");
+        return false;
+      }
+    },
+  },
+  {
+    type: "input",
+    name: "description",
+    message: "Please enter a description of your project. (required)",
+    validate: (descriptionInput) => {
+      if (descriptionInput) {
+        return true;
+      } else {
+        console.log("Please enter a description!");
+        return false;
+      }
+    },
+  },
+  {
+    type: "input",
+    name: "installation",
+    message: "Are there any installation requirements?",
+  },
+  {
+    type: "input",
+    name: "usage",
+    message: "Are ther any usage instructions?",
+  },
+  
 
-const promptUser = () => {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "title",
-      message: "What is the title of your project? (required)",
-      validate: (nameInput) => {
-        if (nameInput) {
-          return true;
-        } else {
-          console.log("Please enter your name!");
-          return false;
-        }
-      },
+  {
+    type: "confirm",
+    name: "licenseConfirm",
+    message: "Would you like to add a license?",
+    default: false,
+  },
+  {
+    type: "list",
+    message: "Please choose a license:",
+    name: "license",
+    choices: ['Apache', 'MIT', 'Mozilla-Public', 'GNU-General-Public', 'Common-Development-and Distribution', 'None'],
+    when: ({ licenseConfirm }) => {
+      if (licenseConfirm) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    {
-      type: "input",
-      name: "description",
-      message: "Please enter a description of your project. (required)",
-      validate: (descriptionInput) => {
-        if (descriptionInput) {
-          return true;
-        } else {
-          console.log("Please enter a description!");
-          return false;
-        }
-      },
+  },
+  {
+    type: "confirm",
+    name: "contributing",
+    message: "Would you like to mention any contributors?",
+    default: false,
+  },
+  {
+    type: "input",
+    name: "confirmContributing",
+    message: "Please list any contributors:",
+    when: ({ contributing }) => {
+      if (contributing) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    {
-      type: "confirm",
-      name: "confirmContents",
-      message: "Would you like to add a table of contents?",
-      default: true,
+  },
+  {
+    type: "confirm",
+    name: "tests",
+    message: "Would you like to provide any examples of tests?",
+    default: false,
+  },
+  {
+    type: "input",
+    name: "confirmTests",
+    message: "Please list any test instructions:",
+    when: ({ tests }) => {
+      if (tests) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    {
-      type: "input",
-      name: "contents",
-      message: "Please provide a list of contents:",
-      when: ({ confirmContents }) => {
-        if (confirmContents) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-    },
-    {
-      type: "input",
-      name: "installation",
-      message: "What are the steps required to install your project?",
-    },
-    {
-      type: "input",
-      name: "usage",
-      message: "Provide instructions and examples for use.",
-    },
-    {
-      type: "input",
-      name: "License",
-      message: "Provide license if applicable.",
-    },
-    {
-      type: "input",
-      name: "Contributing",
-      message: "Provide a list of contributors if applicable.",
-    },
-    {
-      type: "input",
-      name: "Tests",
-      message: "Provide examples of tests if applicable.",
-    },
-    {
-      type: "input",
-      name: "github",
-      message: "Please enter your GitHub username.",
-    },
-    {
-      type: "input",
-      name: "email",
-      message: "Please enter your email.",
-    },
-  ]);
-};
-
-promptUser()
-  .then(portfolioData => {
-    const pageHTML = writeToFile(portfolioData);
-
-     fs.writeFile('./index.html', pageHTML, err => {
-       if (err) throw new Error(err);
-
-       console.log('Readme complete! Check out index.html in this directory to see it!');
-    });
-  });
-
-
-//promptUser().then((answers) => console.log(answers));
+  },
+  {
+    type: "input",
+    name: "github",
+    message: "Please enter your GitHub username.",
+  },
+  {
+    type: "input",
+    name: "email",
+    message: "Please enter your email.",
+  },
+];
 
 // TODO: Create a function to write README file
-// function writeToFile(fileName, data) {}
-
-//fs.writeFile('index.html', writeToFile(fileName, data), err => {
-//if (err) throw err;
-
-//console.log('Readme complete! Check out index.html to see the output!');
-//});
+function writeToFile(fileName, data) {
+  fs.writeFile(fileName, data, (err) => {
+    if (err) throw err;
+    console.log("Success! Information transferred to the README!");
+  });
+}
 
 // TODO: Create a function to initialize app
-function init() {}
+function init() {
+  inquirer.prompt(questions).then(function (userInput) {
+    console.log('answers', userInput);
+    writeToFile("README.md", generateMarkdown(userInput))
+  });
+}
 
 // Function call to initialize app
 init();
-
-/*
-
-const printReadmeData = readmeDataArr => {
-    readmeDataArr.forEach(readmeData => console.log(readmeData));
-}
-printReadmeData(readmeDataArgs);
-
-*/
