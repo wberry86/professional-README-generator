@@ -7,11 +7,8 @@
 
 * Languages utilized:
   * HTML
-  * CSS
   * JavaScript
   * Node.js
-  * Bootstrap
-  * MomentJS
 
 
 ### Link to Website
